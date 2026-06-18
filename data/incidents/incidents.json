@@ -1,0 +1,227 @@
+[
+  {
+    "id": "INC-001",
+    "title": "Database connection pool exhausted",
+    "description": "Checkout service started failing with SQLTimeoutException. Database pool usage reached 98 percent and API latency crossed 2400 ms. The incident impacted payment and order placement flows.",
+    "severity": "P1",
+    "category": "database",
+    "resolution": "Increased database connection pool size temporarily, restarted checkout-service, and fixed a connection leak in the payment repository layer.",
+    "resolved_at": "2025-01-08T10:45:00Z"
+  },
+  {
+    "id": "INC-002",
+    "title": "OOMKilled pods in recommendation service",
+    "description": "Recommendation service pods were repeatedly restarted with OOMKilled status. Memory usage increased after a new model cache was enabled. Users saw partial product recommendation failures.",
+    "severity": "P2",
+    "category": "infra",
+    "resolution": "Increased pod memory limits, reduced model cache size, and added memory alerts for container working set usage.",
+    "resolved_at": "2025-01-17T14:30:00Z"
+  },
+  {
+    "id": "INC-003",
+    "title": "Application disk full on logging node",
+    "description": "Log ingestion node stopped accepting new log batches because disk usage reached 100 percent. Fluent Bit showed write failures and backlog increased quickly.",
+    "severity": "P2",
+    "category": "infra",
+    "resolution": "Rotated old logs, expanded the persistent volume, and added retention rules for debug-level logs.",
+    "resolved_at": "2025-01-26T08:15:00Z"
+  },
+  {
+    "id": "INC-004",
+    "title": "Redis high CPU causing session latency",
+    "description": "Redis primary CPU stayed above 95 percent for 20 minutes. Session lookup latency increased and login requests intermittently timed out.",
+    "severity": "P2",
+    "category": "database",
+    "resolution": "Moved hot keys to a sharded cache pattern, reduced expensive key scans, and restarted the overloaded Redis node during the maintenance window.",
+    "resolved_at": "2025-02-03T19:20:00Z"
+  },
+  {
+    "id": "INC-005",
+    "title": "DNS resolution failure for payment provider",
+    "description": "Payment service could not resolve the external provider hostname. Pods reported temporary failure in name resolution and payment authorization failed.",
+    "severity": "P1",
+    "category": "network",
+    "resolution": "Restarted CoreDNS pods, cleared stale DNS cache, and switched payment provider calls to the secondary endpoint until DNS stabilized.",
+    "resolved_at": "2025-02-10T11:05:00Z"
+  },
+  {
+    "id": "INC-006",
+    "title": "TLS certificate expired for public API gateway",
+    "description": "Public API gateway returned TLS handshake errors after the edge certificate expired. External clients were unable to connect to production APIs.",
+    "severity": "P1",
+    "category": "network",
+    "resolution": "Renewed and deployed the TLS certificate, reloaded gateway configuration, and added certificate expiry monitoring at 30, 14, and 7 days.",
+    "resolved_at": "2025-02-21T05:40:00Z"
+  },
+  {
+    "id": "INC-007",
+    "title": "Slow product search queries",
+    "description": "Product search API latency increased to 3200 ms. Database monitoring showed sequential scans on the product_catalog table.",
+    "severity": "P2",
+    "category": "database",
+    "resolution": "Added missing index on category_id and updated query filters to reduce full table scans.",
+    "resolved_at": "2025-03-01T16:25:00Z"
+  },
+  {
+    "id": "INC-008",
+    "title": "Rate limit errors from notification provider",
+    "description": "Notification service received HTTP 429 responses from the SMS provider. Retry storms increased queue depth and delayed OTP delivery.",
+    "severity": "P2",
+    "category": "application",
+    "resolution": "Added exponential backoff, reduced retry concurrency, and routed priority OTP traffic through the backup notification provider.",
+    "resolved_at": "2025-03-09T13:10:00Z"
+  },
+  {
+    "id": "INC-009",
+    "title": "Bad deployment caused checkout failures",
+    "description": "A new checkout-service release introduced a null pointer error in the discount calculation path. Error rate crossed 18 percent after deployment.",
+    "severity": "P1",
+    "category": "application",
+    "resolution": "Rolled back checkout-service to the previous stable release and added regression tests for discount validation.",
+    "resolved_at": "2025-03-14T09:55:00Z"
+  },
+  {
+    "id": "INC-010",
+    "title": "Network partition between service mesh nodes",
+    "description": "Several pods reported upstream connection failures across two availability zones. Service mesh telemetry showed increased 503 responses.",
+    "severity": "P1",
+    "category": "network",
+    "resolution": "Shifted traffic away from the impacted zone, restarted affected sidecar proxies, and validated network policy changes.",
+    "resolved_at": "2025-03-28T22:35:00Z"
+  },
+  {
+    "id": "INC-011",
+    "title": "CPU throttling in order service",
+    "description": "Order service latency increased during peak traffic. Kubernetes metrics showed CPU throttling above 70 percent.",
+    "severity": "P3",
+    "category": "infra",
+    "resolution": "Increased CPU limits, tuned autoscaling thresholds, and enabled dashboard alerts for throttling.",
+    "resolved_at": "2025-04-04T12:00:00Z"
+  },
+  {
+    "id": "INC-012",
+    "title": "Kafka consumer lag in billing pipeline",
+    "description": "Billing events were delayed because consumer lag crossed 250000 messages. A slow downstream database write path blocked consumer throughput.",
+    "severity": "P2",
+    "category": "application",
+    "resolution": "Scaled consumer replicas, optimized batch writes, and temporarily paused non-critical topics.",
+    "resolved_at": "2025-04-12T18:45:00Z"
+  },
+  {
+    "id": "INC-013",
+    "title": "Staging deployment failed health checks",
+    "description": "Staging deployment did not pass readiness checks after configuration changes. The service was not receiving production traffic.",
+    "severity": "P4",
+    "category": "application",
+    "resolution": "Corrected the staging environment variable and redeployed the service.",
+    "resolved_at": "2025-04-20T07:30:00Z"
+  },
+  {
+    "id": "INC-014",
+    "title": "Image pull backoff in worker namespace",
+    "description": "Background worker pods failed with ImagePullBackOff after a registry token rotation. Scheduled jobs were delayed but customer-facing APIs were healthy.",
+    "severity": "P3",
+    "category": "infra",
+    "resolution": "Updated image pull secret, restarted worker deployment, and verified registry access.",
+    "resolved_at": "2025-05-02T06:50:00Z"
+  },
+  {
+    "id": "INC-015",
+    "title": "API gateway 503 errors after config reload",
+    "description": "API gateway returned intermittent 503 responses after a routing configuration reload. The issue affected a subset of mobile clients.",
+    "severity": "P2",
+    "category": "network",
+    "resolution": "Reverted gateway route configuration, warmed upstream connection pools, and added validation checks before reload.",
+    "resolved_at": "2025-05-09T15:15:00Z"
+  },
+  {
+    "id": "INC-016",
+    "title": "Elasticsearch indexing delay",
+    "description": "Search indexing delay increased to 45 minutes after bulk import jobs started. Users saw stale product search results.",
+    "severity": "P3",
+    "category": "database",
+    "resolution": "Paused the bulk import job, increased indexing workers, and tuned refresh interval.",
+    "resolved_at": "2025-05-16T20:05:00Z"
+  },
+  {
+    "id": "INC-017",
+    "title": "Memory leak in inventory service",
+    "description": "Inventory service memory usage increased gradually after the latest release. Pods restarted every 40 minutes and inventory updates were delayed.",
+    "severity": "P2",
+    "category": "application",
+    "resolution": "Rolled back the release, identified an unclosed HTTP client, and patched the leak.",
+    "resolved_at": "2025-05-24T11:40:00Z"
+  },
+  {
+    "id": "INC-018",
+    "title": "Database replica lag crossed threshold",
+    "description": "Read replica lag crossed 600 seconds during reporting workload execution. Analytics dashboards showed delayed data.",
+    "severity": "P3",
+    "category": "database",
+    "resolution": "Moved reporting workload to a separate replica and reduced long-running analytical queries.",
+    "resolved_at": "2025-06-02T10:10:00Z"
+  },
+  {
+    "id": "INC-019",
+    "title": "Ingress controller pod crash loop",
+    "description": "Ingress controller entered CrashLoopBackOff after a malformed annotation was deployed. Some internal services became unreachable.",
+    "severity": "P2",
+    "category": "infra",
+    "resolution": "Removed malformed ingress annotation, restarted ingress controller, and added manifest validation.",
+    "resolved_at": "2025-06-11T17:25:00Z"
+  },
+  {
+    "id": "INC-020",
+    "title": "Object storage timeout during invoice generation",
+    "description": "Invoice generation service timed out while writing PDF files to object storage. The provider status page showed elevated latency in one region.",
+    "severity": "P3",
+    "category": "network",
+    "resolution": "Switched writes to secondary object storage region and retried failed invoice jobs.",
+    "resolved_at": "2025-06-19T09:35:00Z"
+  },
+  {
+    "id": "INC-021",
+    "title": "Minor CPU increase in reporting service",
+    "description": "Reporting service CPU increased to 72 percent for 10 minutes. No customer impact was observed and latency stayed within SLO.",
+    "severity": "P4",
+    "category": "application",
+    "resolution": "Observed the service, confirmed no SLO breach, and kept the alert as informational.",
+    "resolved_at": "2025-07-01T04:20:00Z"
+  },
+  {
+    "id": "INC-022",
+    "title": "Checkout API error budget burn",
+    "description": "Checkout API started burning error budget faster than expected. Error rate stayed at 4 percent after a traffic spike.",
+    "severity": "P2",
+    "category": "application",
+    "resolution": "Scaled checkout-service replicas, enabled request shedding for low-priority traffic, and reviewed dependency latency.",
+    "resolved_at": "2025-07-09T21:10:00Z"
+  },
+  {
+    "id": "INC-023",
+    "title": "CoreDNS latency after cluster upgrade",
+    "description": "DNS lookup latency increased after a Kubernetes cluster upgrade. Several services reported delayed dependency connections.",
+    "severity": "P2",
+    "category": "network",
+    "resolution": "Increased CoreDNS replicas, reviewed cluster DNS config, and restarted affected deployments.",
+    "resolved_at": "2025-07-18T12:55:00Z"
+  },
+  {
+    "id": "INC-024",
+    "title": "Pod pending due to insufficient memory",
+    "description": "New analytics pods stayed in Pending state because the cluster had insufficient memory. Batch processing was delayed but APIs were unaffected.",
+    "severity": "P3",
+    "category": "infra",
+    "resolution": "Scaled the node group, reduced analytics pod requests, and added capacity alerts.",
+    "resolved_at": "2025-07-27T23:05:00Z"
+  },
+  {
+    "id": "INC-025",
+    "title": "Payment webhook signature validation failure",
+    "description": "Payment webhook processor rejected valid callbacks after a secret rotation mismatch. Order status updates were delayed for successful payments.",
+    "severity": "P1",
+    "category": "application",
+    "resolution": "Rolled back the webhook secret, replayed missed callbacks, and added secret rotation validation.",
+    "resolved_at": "2025-08-04T06:25:00Z"
+  }
+]
