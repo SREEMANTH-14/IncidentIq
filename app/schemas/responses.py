@@ -12,7 +12,6 @@ class HealthResponse(BaseModel):
     """
     HealthResponse is returned by GET /health.
 
-    This endpoint is required by the assessment document.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -90,7 +89,6 @@ class IncidentResourceResponse(BaseModel):
     """
     IncidentResourceResponse is returned by GET /incidents/{incident_id}.
 
-    This satisfies the assessment requirement for one resource retrieval endpoint.
     """
 
     model_config = ConfigDict(extra="forbid")

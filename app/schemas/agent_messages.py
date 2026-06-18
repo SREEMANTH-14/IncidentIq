@@ -5,9 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 class AgentName(str, Enum):
     """
-    AgentName keeps the official agent role names from the IncidentIQ use case.
+    AgentName keeps the official agent role
 
-    These values match the assessment document's Use Case 1 agent names.
     """
 
     ORCHESTRATOR = "Orchestrator"

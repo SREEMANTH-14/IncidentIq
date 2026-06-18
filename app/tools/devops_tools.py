@@ -154,8 +154,6 @@ def restart_service(service: str, environment: str) -> ToolExecutionResult:
     Purpose:
     Pretends to restart the affected service.
 
-    This is safe for the assessment because it does not execute kubectl,
-    OpenShift oc commands, Docker commands, or system commands.
     """
 
     tool_name = "restart_service"
