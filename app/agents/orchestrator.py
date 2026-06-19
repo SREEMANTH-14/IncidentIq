@@ -1,6 +1,8 @@
 import logging
 import uuid
 
+from app.core.trace import normalize_trace_id
+
 from app.core.config import ConfigSettings, get_settings
 from app.graph.state import (
     IncidentIQGraphState,
@@ -55,13 +57,7 @@ class Orchestrator:
         - IncidentProcessResponse for the API layer
         """
 
-        if trace_id is None:
-            active_trace_id = str(uuid.uuid4())
-        else:
-            active_trace_id = trace_id.strip()
-
-        if not active_trace_id:
-            active_trace_id = str(uuid.uuid4())
+        active_trace_id = normalize_trace_id(trace_id=trace_id)
 
         logger.info(
             "Orchestrator started trace_id=%s incident_id=%s",

@@ -20,6 +20,11 @@ from app.schemas.responses import (
     IncidentProcessResponse,
     IncidentResourceResponse,
 )
+from app.schemas.metrics import (
+    AgentWorkflowMetrics,
+    HTTPRouteMetric,
+    MetricsResponse
+)
 
 __all__ = [
     "AgentError",
@@ -40,4 +45,7 @@ __all__ = [
     "ToolExecutionResult",
     "ToolExecutionStatus",
     "TriageResult",
+    "AgentWorkflowMetrics",
+    "HTTPRouteMetric",
+    "MetricsResponse",
 ]
