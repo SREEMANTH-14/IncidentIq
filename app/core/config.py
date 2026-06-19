@@ -42,6 +42,15 @@ class ConfigSettings(BaseSettings):
         default=True,
         description="Enables debug mode for local development.",
     )
+    auto_generate_data: bool = Field(
+    default=True,
+    description="Generate synthetic data automatically during Docker startup.",
+    )
+
+    auto_ingest_rag: bool = Field(
+        default=True,
+        description="Ingest RAG corpus automatically during Docker startup.",
+    )
 
     # ---------------------------------------------------------
     # API Settings
